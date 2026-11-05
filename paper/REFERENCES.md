@@ -1,24 +1,22 @@
 # Reference verification
 
 Every reference in `paper/audelle_ieee.tex` was checked against a live
-bibliographic record before being written down. Nothing was cited from memory.
-This file records what was checked, so the bibliography can be audited.
+bibliographic record. Nothing was cited from memory. This file records each
+check, so the bibliography can be audited.
 
-Verified on 2026-10-06. Sources used: **Crossref REST API**
-(`api.crossref.org`) for anything with a DOI, **arXiv** for preprints, and
-**Zenodo** for the AIMC paper.
+Verified on 2026-10-06. Sources: **Crossref REST API** (`api.crossref.org`) for
+anything with a DOI, **arXiv** for preprints, and **Zenodo** for the AIMC paper.
 
-One near-miss is recorded deliberately: arXiv `1712.06884` was assumed to be the
-NSynth paper and is in fact *"Experimental entanglement of temporal order"*, a
-quantum physics paper. It was caught before being cited and **not** used. The
-NSynth dataset is therefore cited nowhere in this paper, because the training
-data is referred to by its Hugging Face mirror rather than by paper.
+The check caught one near-miss. arXiv `1712.06884` is *"Experimental
+entanglement of temporal order"*, a quantum physics paper, not the NSynth paper.
+The paper does not cite it. The paper cites the NSynth training data by its
+Hugging Face mirror, not by paper.
 
 ## Verified references
 
-Numbering below is the rendered numbering. IEEEtran numbers `thebibliography`
-entries in the order they are written, so the bibliography is ordered by first
-citation in the text; `check_paper.py` enforces that the two agree.
+Numbers below are the rendered numbering. IEEEtran numbers `thebibliography`
+entries in written order, so the bibliography is ordered by first citation in
+the text. `check_paper.py` enforces that the two agree.
 
 | # | Reference | Verified against | DOI / ID |
 |---|---|---|---|
@@ -41,23 +39,25 @@ citation in the text; `check_paper.py` enforces that the two agree.
 
 ## Rejected during verification
 
-Searched for, not found in a bibliographic record, therefore **not cited**:
+The checks searched for these works and did not find a bibliographic record. The
+paper does **not** cite them:
 
-- Groove MIDI dataset (Hawthorne et al.) — Crossref returned unrelated hits.
-- Fitzgerald, *Harmonic/Percussive Separation using Median Filtering* (DAFx-10) —
+- Groove MIDI dataset (Hawthorne et al.). Crossref returned unrelated hits.
+- Fitzgerald, *Harmonic/Percussive Separation using Median Filtering* (DAFx-10).
   Crossref only returned Fitzgerald's 2012 IET paper, a different work.
-- Böck / Ellis beat and downbeat tracking — ISMIR and older venues are not
-  well indexed by Crossref.
-- Powerset clustering (Wang et al.) — Crossref returned three different papers;
-  none was the one intended.
-- Krumhansl 1982 *Internal representations for music perception* — found, but
-  the 1982 probe-tone profile paper [10] is the one actually used by the code.
+- Böck / Ellis beat and downbeat tracking. ISMIR and older venues are not well
+  indexed by Crossref.
+- Powerset clustering (Wang et al.). Crossref returned three different papers,
+  and none was the one intended.
+- Krumhansl 1982 *Internal representations for music perception*. The check found
+  it, but the 1982 probe-tone profile paper [10] is the one the code uses.
 
 ## Volume and page numbers
 
-Where Crossref supplied a volume, issue or page range it is included. Where it
-did not, the field is omitted rather than filled in from memory. Every reference
-carries a DOI or an arXiv identifier, which is the authoritative locator.
+Where Crossref supplied a volume, issue or page range, the entry includes it.
+Where Crossref did not, the entry omits the field and does not fill it from
+memory. Every reference carries a DOI or an arXiv identifier, the authoritative
+locator.
 
 ## Reproducing the numbers
 
@@ -66,6 +66,4 @@ python scripts\evaluate_genre_classifier.py --clips-per-genre 10
 python -m pytest server/tests -q
 ```
 
-The genre evaluation writes `server/ml/models/genre_eval.json`. It previously
-printed to stdout and discarded the audio, so nothing in the repository recorded
-what the shipped artefact scored.
+The genre evaluation writes `server/ml/models/genre_eval.json`.

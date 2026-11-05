@@ -1,22 +1,18 @@
 # Audelle paper
 
-`audelle_ieee.tex` — IEEE conference format (IEEEtran), 9 sections, 16
+`audelle_ieee.tex` is an IEEE conference paper (IEEEtran) with 9 sections and 16
 references.
 
 ## Building
 
-The PDF in this directory was built with
-[Tectonic](https://tectonic-typesetting.github.io/) 0.17.0, which fetches the
+Build with [Tectonic](https://tectonic-typesetting.github.io/). It fetches the
 TeX packages it needs on first run:
 
 ```powershell
 tectonic audelle_ieee.tex
 ```
 
-Tectonic reruns TeX and `xdvipdfmx` itself, so one command is enough. The
-result is 6 pages, with the references sharing the final page. There are two
-cosmetic `Underfull \hbox` warnings (the abstract and the failure-modes intro),
-and no errors.
+Tectonic reruns TeX and `xdvipdfmx` itself, so one command is enough.
 
 With TeX Live instead:
 
@@ -28,8 +24,8 @@ pdflatex -interaction=nonstopmode audelle_ieee.tex
 pdflatex -interaction=nonstopmode audelle_ieee.tex
 ```
 
-Two passes minimum, three recommended, so that `\ref` resolves. Rebuild
-`audelle_ieee.pdf` after any edit to the `.tex` file; do not edit the PDF.
+Use two passes minimum and three recommended, so that `\ref` resolves. Rebuild
+`audelle_ieee.pdf` after any edit to the `.tex` file. Do not edit the PDF.
 
 ## Checking it without LaTeX
 
@@ -37,27 +33,27 @@ Two passes minimum, three recommended, so that `\ref` resolves. Rebuild
 python paper\check_paper.py
 ```
 
-This verifies, without a PDF toolchain:
+This script validates the structure without a PDF toolchain:
 
-- braces balance and every environment is opened/closed exactly once;
-- every `\cite{key}` resolves to a `\bibitem{key}`, and every `\bibitem` is cited;
-- **the bibliography is in first-citation order**, which is what IEEEtran numbers
-  by — an out-of-order bibliography renders numbers that contradict the text;
-- no stray hand-typed `[n]` remains, because in LaTeX that is plain text and not
-  a citation;
-- every `\ref` resolves and every `\label` is referenced;
+- braces balance, and every environment opens and closes exactly once.
+- every `\cite{key}` resolves to a `\bibitem{key}`, and the text cites every
+  `\bibitem`.
+- **the bibliography is in first-citation order**, which IEEEtran uses for
+  numbering. An out-of-order bibliography renders numbers that contradict the
+  text.
+- no stray hand-typed `[n]` remains, because LaTeX treats it as plain text and
+  not as a citation.
+- every `\ref` resolves, and the text references every `\label`.
 - `Section~<roman>` cross-references point at sections that exist.
-
-It currently reports `structure OK`.
 
 ## Files
 
 | File | Purpose |
 |---|---|
 | `audelle_ieee.tex` | The paper |
-| `audelle_ieee.pdf` | Built PDF (Tectonic 0.17.0), 6 pages |
+| `audelle_ieee.pdf` | Built PDF, 6 pages |
 | `REFERENCES.md` | Every reference, what verified it, and what was rejected |
-| `check_paper.py` | Structural validation, run in CI-style |
+| `check_paper.py` | Structural validation |
 | `fix_citations.py` | One-shot conversion of hand-typed `[n]` markers to `\cite{}` |
 
 ## Reproducing the numbers in the paper
@@ -68,9 +64,7 @@ python -m pytest server\tests -q
 python server\ml\eval\prompt_bench.py
 ```
 
-The genre evaluation writes `server/ml/models/genre_eval.json`. It previously
-printed to stdout and threw the audio away, so nothing in the repository recorded
-what the shipped artefact actually scores.
+The genre evaluation writes `server/ml/models/genre_eval.json`.
 
 ## What the paper deliberately does not claim
 

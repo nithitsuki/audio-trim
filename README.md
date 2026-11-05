@@ -1,168 +1,101 @@
-# Audelle — AI-Powered Audio Editor
+# Audelle: AI-Powered Audio Editor
 
-An intelligent audio editor where **everything is possible by prompting**. The AI understands audio at a deep level — instruments, structure, mood, and speaker intent — and executes edits from natural language. No drag handles, no waveform scrubbing (except manual mode fallback).
-
----
+Audelle edits audio from natural-language prompts. The AI reads instruments, structure, mood, and speaker intent, then runs the edit. Manual mode is the fallback for direct waveform work.
 
 ## Features
 
-### 🧠 AI Audio Understanding (Core ML)
-When audio is loaded, the model automatically analyzes and catalogs:
-- **Source separation** — Identifies all stems: vocals, drums, bass, guitar, keys, pads, FX
-- **Instrument classification** — "This is a Fender Strat, fingerpicked, with reverb"
-- **Song structure** — Intro, verse, chorus, bridge, outro with timestamps
-- **Mood/energy curve** — Tension, energy, loudness over time
-- **Key, BPM, time signature**
-- **Speaker diarization** — Who spoke when (for podcasts/interviews)
-- **Transcription** — Full word-level transcript with timestamps
+### AI audio understanding (core ML)
 
-### 🎤 Natural Language Prompting
+The model automatically analyzes and catalogs audio when it loads.
 
-**Trimming & Arrangement**
-- "Cut from the second chorus to the outro"
-- "Remove the bridge entirely"
-- "Make a 30-sec highlight reel from the best parts"
+- **Source separation**: vocals, drums, bass, guitar, keys, pads, FX.
+- **Instrument classification**: for example, "Fender Strat, fingerpicked, with reverb".
+- **Song structure**: intro, verse, chorus, bridge, outro with timestamps.
+- **Mood/energy curve**: tension, energy, loudness over time.
+- **Key, BPM, time signature**.
+- **Speaker diarization**: who spoke when, for podcasts and interviews.
+- **Transcription**: full word-level transcript with timestamps.
 
-**Instrument / Stem Editing**
-- "Remove the kick drum from 2:30 to 3:45"
-- "Keep only the vocals"
-- "Turn down the hi-hats by 50%"
-- "Swap the bass with a synth pad in the bridge"
-- "Give me the drums as a separate stem"
+### Natural-language prompting
 
-**Audio Inpainting & Fixing**
-- "Remove that cymbal crash at 1:23 and fill smoothly"
-- "Clean up the cough at 0:45"
-- "Replace the guitar solo with something more melodic"
+| Area | Example prompt |
+|---|---|
+| Trimming and arrangement | "Cut from the second chorus to the outro" |
+| Instrument and stem editing | "Remove the kick drum from 2:30 to 3:45" |
+| Inpainting and repair | "Remove that cymbal crash at 1:23 and fill smoothly" |
+| Mood and style | "Add reverb to the vocals. Make it sound like a cathedral." |
+| Podcast and dialogue | "Remove all ums, ahs, and pauses longer than 0.5s" |
+| Short-form content | "Make a vertical 30-sec version for TikTok" |
+| Film and video | "Separate dialogue, music, and SFX into stems" |
 
-**Mood & Style**
-- "Make this section sound darker / more cinematic"
-- "Give the chorus more energy"
-- "Add reverb to the vocals — make it sound like a cathedral"
+### Manual editor (dedicated page)
 
-**Podcast / Dialogue**
-- "Remove all ums, ahs, and pauses longer than 0.5s"
-- "Normalize all speakers to the same volume"
-- "Split this interview by speaker"
-- "Generate chapters from the transcript"
+Manual mode gives fine control when a prompt is not precise. Open it from the sidebar at `/features/manual`. It loads your last upload automatically.
 
-**Content Creator / Short-form**
-- "Make a vertical 30-sec version for TikTok"
-- "Add captions burned in"
-- "Speed up the slow parts, keep exciting parts normal"
+- Waveform with drag-to-select, draggable trim handles, and click-to-seek.
+- Keep the selection (trim) or cut it out.
+- Fade in and fade out with per-side durations (0 to 10s).
+- Gain knob (-12 to +12 dB), normalize, speed (0.5 to 2x).
+- Each edit chains on the last. Download and edit history are available.
 
-**Film / Video**
-- "Clean up dialogue in this noisy scene"
-- "Match room tone across all clips"
-- "Separate dialogue, music, and SFX into stems"
-- "Sync my voiced ADR to lip movements"
+### Export and integration
 
-### ✋ Manual Editor (Dedicated Page)
-For fine-grained control when prompting isn't precise enough — sidebar → **Manual Editor** (`/features/manual`), picks up your last upload automatically:
-- Real waveform with drag-to-select + draggable trim handles, click-to-seek
-- Keep selection (trim) / cut selection out
-- Fade in / fade out with per-side durations (0–10s)
-- Gain knob (−12…+12 dB), normalize, speed (0.5–2x)
-- Every edit chains on the last, with download + edit history
+- MP3, WAV, FLAC, AAC. Stems as ZIP.
+- Premiere Pro, DaVinci Resolve, and Final Cut XML.
+- Share link and download.
+- Batch processing.
 
-### 📦 Export & Integration
-- Export as MP3, WAV, FLAC, AAC, stems as ZIP
-- Export to Premiere Pro / DaVinci Resolve / Final Cut XML
-- Share link / download
-- Batch processing
-
----
-
-## Project Structure
+## Project structure
 
 ```
 audio-trim/
-├── mobile/                          # React Native (Expo) app
-│   ├── app/                         # Screens (file-based routing)
-│   ├── components/                  # Reusable UI
-│   ├── services/                    # API calls
-│   └── assets/
-│
-├── website/                         # Next.js web app
-│   ├── app/                         # Pages (App Router)
-│   ├── components/
-│   ├── services/
-│   ├── hooks/
-│   └── public/
-│
-├── server/                          # Backend API (FastAPI / Node.js?)
-│   ├── routes/
-│   ├── services/                    # Business logic
-│   ├── ml/                          # ML model inference
-│   │   ├── source_separation/
-│   │   ├── transcription/
-│   │   ├── diarization/
-│   │   ├── audio_understanding/     # Instrument ID, structure, mood
-│   │   └── prompting_engine/        # NL → audio operations
-│   └── utils/
-│
-├── shared/                          # Shared types, validation, constants
-│
-├── docs/
-│   └── architecture.md
-│
-└── README.md
+├── mobile/     # React Native (Expo) app
+├── website/    # Next.js web app
+├── server/     # FastAPI backend: routes, services, ml, utils, tests
+├── ml/         # Standalone instruction-understanding project
+├── docs/       # Reports, model cards, and checklists
+├── paper/      # IEEE paper sources and PDF
+└── scripts/    # Training, evaluation, and report scripts
 ```
-
----
 
 ## ML coursework (standalone)
 
-`ml/` is a separate instruction-understanding project: it learns to map a
-natural-language editing instruction to an operation, target, and amount. It
-has its own dataset, training scripts, evaluation, and demo, and it does **not**
-import or modify the app. Audelle integration comes later, on a branch, after
-the ML submission. Start at [`ml/README.md`](ml/README.md).
+`ml/` is a separate instruction-understanding project. It maps a natural-language edit instruction to an operation, target, and amount. It has its own dataset, training scripts, evaluation, and demo. It does not import or modify the app. Audelle integration comes later on a branch, after the ML submission. Start at `ml/README.md`.
 
----
+## Work plan
 
-## Work Plan
+### Phase 1: ML backbone (implemented in `server/ml/`)
 
-### Phase 1 — ML Backbone (Server) ✅ (implemented in `server/ml/`)
-| Task | Details |
-|------|---------|
-| Source separation | Demucs / Hybrid Demucs — isolate vocals, drums, bass, other |
-| Instrument classification | Feature-based detector — library includes a heuristic `instrument_classifier.py`; swappable for a pretrained model (musicnn/YamNet) |
-| Genre classification | Lightweight random-forest classifier trained on a small GTZAN subset (`scripts/train_genre_classifier.py`, artifact at `server/ml/models/genre_classifier.joblib`) — predicts genre + genre-specific suggested edits in `understand` responses |
-| Song structure | `song_structure.py` — intro/verse/chorus/bridge/outro via beat-synced chroma+MFCC recurrence |
-| Mood/energy curve | `mood_curve.py` — energy/tension/brightness/loudness over time + summary mood |
-| Transcription | Whisper (openai/whisper-tiny) — word-level transcript |
-| Speaker diarization | `diarization.py` — VAD + MFCC clustering; pyannote-ready (needs HF token) |
-| Prompting engine | `prompt_llm.py` LLM-first with deterministic regex fallback (see `server/ml/prompt_engine.py`) |
-| Audio inpainting | `inpainter.py` — seamless crossfade fill for removed/replaced ranges (paint intent) |
+- **Source separation**: Demucs / Hybrid Demucs isolates vocals, drums, bass, other.
+- **Instrument classification**: feature-based detector with a heuristic `instrument_classifier.py`. You can swap it for a pretrained model (musicnn/YamNet).
+- **Genre classification**: random forest trained on a small GTZAN subset. Train with `scripts/train_genre_classifier.py`. Artifact: `server/ml/models/genre_classifier.joblib`. It predicts genre and genre-specific suggested edits in `understand` responses.
+- **Song structure**: `song_structure.py` finds intro/verse/chorus/bridge/outro with beat-synced chroma+MFCC recurrence.
+- **Mood/energy curve**: `mood_curve.py` reports energy/tension/brightness/loudness over time and a summary mood.
+- **Transcription**: Whisper (openai/whisper-tiny) gives a word-level transcript.
+- **Speaker diarization**: `diarization.py` uses VAD + MFCC clustering. It is pyannote-ready and needs an HF token.
+- **Prompting engine**: `prompt_llm.py` uses the LLM first, with a deterministic regex fallback (`server/ml/prompt_engine.py`).
+- **Audio inpainting**: `inpainter.py` gives a crossfade fill for removed or replaced ranges (paint intent).
 
-### Phase 2 — Server API & Processing Pipeline ✅ (implemented in `server/services/`)
-- Async job queue — `jobs.py` thread-pool; `POST /api/jobs/{process,separate,transcribe,understand,diarize,inpaint}` + `GET /api/jobs/{id}`
-- File upload / storage — `storage.py` local (default) + optional S3; uploads return a storage key
-- Audio manipulation backend — pydub, librosa, ffmpeg (`audio_operations.py`, `converter.py`, `video_extractor.py`)
-- Export pipeline — `exporter.py`: stems ZIP, FCPXML (Final Cut), CMX3600 EDL (Premiere/DaVinci); served via `GET /api/export/download?path=`
+### Phase 2: Server API and pipeline (implemented in `server/services/`)
 
-### Phase 3 — Website (Next.js) ✅ (implemented)
-- Upload audio (drag & drop, file picker, URL import)
-- Prompt input (text box, suggested prompts, voice input via Web Speech API)
-- AI analysis results display — real `/api/ml/understand` data: instruments, song structure, mood
-- Preview player with waveform + playhead (`AudioPreview.tsx`, HTML5 audio + energy-curve canvas)
-- Manual mode editor — basic fallback with play/set-start/set-end/trim (`ManualEditor.tsx`)
-- Export / share — download processed result + stems ZIP (via `/api/export/zip`)
+- **Async job queue**: `jobs.py` thread pool. `POST /api/jobs/{process,separate,transcribe,understand,diarize,inpaint}` and `GET /api/jobs/{id}`.
+- **File upload and storage**: `storage.py` uses local storage by default and optional S3. Uploads return a storage key.
+- **Audio backend**: pydub, librosa, ffmpeg (`audio_operations.py`, `converter.py`, `video_extractor.py`).
+- **Export pipeline**: `exporter.py` writes stems ZIP, FCPXML (Final Cut), and CMX3600 EDL (Premiere/DaVinci). Download at `GET /api/export/download?path=`.
 
-### Phase 4 — Mobile App (React Native / Expo)
-- Same flow as web, optimized for touch
-- File picker / share sheet audio import
-- Offline processing queue (upload when connected)
-- Local playback + prompt history
-- Push notifications for job completion
+### Phase 3: Website (Next.js, implemented)
 
-### Phase 5 — Platform & Polish
-- User accounts & project save/load
-- Prompt history / favorites
-- Batch processing
-- API for NLE plugins (Premiere, DaVinci, Final Cut)
-- Fine-tuning from user feedback — improve model over time
-- Community prompt library
+- Upload by drag and drop, file picker, or URL import.
+- Prompt input: text box, suggested prompts, and voice input via the Web Speech API.
+- Analysis display uses real `/api/ml/understand` data: instruments, song structure, mood.
+- Preview player with waveform and playhead (`AudioPreview.tsx`, HTML5 audio + energy-curve canvas).
+- Manual mode fallback with play, set start, set end, and trim (`ManualEditor.tsx`).
+- Export and share: download the processed result or stems ZIP via `/api/export/zip`.
 
----
+### Phase 4: Mobile app (planned)
+
+React Native / Expo. The app uses the web flow, adapted for touch. It adds file picker and share sheet import, an offline queue that uploads when connected, local playback, prompt history, and completion push notifications.
+
+### Phase 5: Platform (planned)
+
+The planned platform work covers user accounts, project save/load, prompt favorites, and batch processing. It also covers an API for NLE plugins (Premiere, DaVinci, Final Cut), fine-tuning from user feedback, and a community prompt library.
